@@ -6,7 +6,7 @@ class Instrumento {
         revisiones.add(nuevaRevision)
     }
 
-    method afinacion()//10 corresponde a un instrumento afinado y 0 a uno desafinado
+    method afinacion()//true corresponde a un instrumento afinado y false a uno desafinado
     method costo()
     method esValioso()
     method familia
@@ -19,7 +19,7 @@ class Revision {
 class Fender inherits Instrumento {
     const color 
 
-    override method afinacion()= 10
+    override method afinacion()= true
     
     override method costo(){
         if(color == "negro"){
@@ -32,18 +32,12 @@ class Fender inherits Instrumento {
 
 class Jupiter inherits Instrumento {
     var temperatura 
-    var sordina
+    const sordina
     override method afinacion(){
-      if (temperatura.between(20,25)){
-        return 10
-      } else if (temperatura<20) {
-        self.calentarMetal()
-        return 0
-      } else {
-        return 0
-      }
+        return temperatura.between(20,25)
     }
-    method calentarMetal() = temperatura + 1
+    method calentarMetal()  { // en el punto 5??
+        temperatura=temperatura + 1}
     
     override method costo(){
         var costo = 30
@@ -54,31 +48,33 @@ class Jupiter inherits Instrumento {
     }
     override method esValioso() = false
     override method familia()="vientos"
+    method temp()=temperatura
 }
 
 class Bechstein inherits Instrumento{
-    var anchoSalon 
-    var largoSalon
+    const anchoSalon 
+    const largoSalon
     method revisionDeFabrica(){
         self.registrarRevision(new Date(), "Fabrica")
     }
     
     override method afinacion (){
-        var superficieSalon = anchoSalon * largoSalon
-          if (superficieSalon > 20 ){
-            return 10
-        } else{return 0}
+     const superficieSalon = anchoSalon * largoSalon
+        return superficieSalon > 20
     }
     override method costo()= 2*anchoSalon
-    override method esValioso() = self.afinacion() == 10
+    override method esValioso() = self.afinacion()
     override method familia()="cuerdas"
 
 }
 
 class Stagg inherits Instrumento{
-  var tremolos = 0
-  const property pintura  
-    override method afinacion ()=10
+    var tremolos = 0
+    const property pintura  
+    override method afinacion (){
+        return tremolos<10
+    }
+    
     method hacerTremolo(){
         tremolos =tremolos + 1
     } 

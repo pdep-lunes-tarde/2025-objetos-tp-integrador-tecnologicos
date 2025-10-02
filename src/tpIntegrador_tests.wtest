@@ -1,5 +1,158 @@
 import tpIntegrador.*
+// test punto 1
+describe"INSTRUMENTOS"{
+	//GUITARRA FENDER
+test " una Fender está afinada" {
+	const guitarra= new Fender(color="negro")
+	assert.equals(guitarra.afinacion(), true)
+}
+test " el costo de una Fender negra es 15" {
+	const guitarra= new Fender(color="negro")
+	assert.equals(guitarra.costo(), 15)
+}
 
-test "Test de prueba" {
-	assert.equals(4, 2 + 2)
+test " el costo de una Fender roja es es 10" {
+	const guitarra= new Fender(color="rojo")
+	assert.equals(guitarra.costo(), 10)
+}
+
+test " una Fender es valiosa" {
+	const guitarra= new Fender(color="rojo")
+	assert.equals(guitarra.esValioso(),true)
+}
+// TROMPETA JUPITER
+test " Una trompeta Júpiter a una temperatura ambiente de 20 grados está afinada" {
+	const trompeta= new Jupiter(temperatura=20,sordina=true)
+	assert.equals(trompeta.afinacion(),true)
+}
+test " Una trompeta Júpiter a una temperatura ambiente de 25 grados está afinada" {
+	const trompeta= new Jupiter(temperatura=25,sordina=true)
+	assert.equals(trompeta.afinacion(),true)
+}
+
+test " Una trompeta Júpiter a una temperatura ambiente de 19 grados no está afinada" {
+	const trompeta= new Jupiter(temperatura=19,sordina=true)
+	assert.equals(trompeta.afinacion(),false)
+}
+
+test " Una trompeta Júpiter a una temperatura ambiente de 26 grados no está afinada" {
+	const trompeta= new Jupiter(temperatura=26,sordina=true)
+	assert.equals(trompeta.afinacion(),false)
+}
+
+test " Una trompeta Júpiter a una temperatura ambiente de 19 grados, si la afinamos, pasa a estar afinada" {
+	const trompeta= new Jupiter(temperatura=19,sordina=true)
+	assert.equals(trompeta.afinacion(),false)
+	trompeta.calentarMetal() 
+	assert.equals(trompeta.afinacion(),true)
+}
+
+test " La trompeta cuesta sin sordina 30 chelines" {
+	const trompeta= new Jupiter(temperatura=26,sordina=false)
+	assert.equals(trompeta.costo(),30)
+}
+
+test " La trompeta cuesta con sordina 35 chelines" {
+	const trompeta= new Jupiter(temperatura=26,sordina=true)
+	assert.equals(trompeta.costo(),35)
+}
+
+test " La trompeta no es valiosa" {
+	const trompeta= new Jupiter(temperatura=26,sordina=false)
+	assert.equals(trompeta.esValioso(),false)
+}
+//Piano Bechstein
+test " El piano en una habitación de 5x5 está afinado" {
+	const piano= new Bechstein(anchoSalon=5,largoSalon=5)
+	assert.equals(piano.afinacion(),true)
+}
+test " El piano en una habitación chica (de 20 metros cuadrados) no está afinado" {
+	const piano= new Bechstein(anchoSalon=5,largoSalon=4)
+	assert.equals(piano.afinacion(),false)
+}
+
+test " El costo del piano en la habitación de 5x5 es de 10" {
+	const piano= new Bechstein(anchoSalon=5,largoSalon=5)
+	assert.equals(piano.costo(),10)
+}
+
+test " El piano es valioso en la habitación inicial de 5x5" {
+	const piano= new Bechstein(anchoSalon=5,largoSalon=5)
+	assert.equals(piano.esValioso(),true)
+}
+
+test " El piano movido a una habitación chica (de 20 metros cuadrados) no es valioso" {
+	const piano= new Bechstein(anchoSalon=4,largoSalon=5)
+	assert.equals(piano.esValioso(),false)
+}
+//Violín Stagg
+test " El violín Stagg comienza afinado (0 trémolos)" {
+	const violin= new Stagg(tremolos=0,pintura="laca acrilica")
+	assert.equals(violin.afinacion(),true)
+}
+test " El violín con 9 trémolos todavía está afinado" {
+	const violin= new Stagg(tremolos=0,pintura="laca acrilica")
+	violin.hacerTremolo()
+	violin.hacerTremolo()
+	violin.hacerTremolo()
+	violin.hacerTremolo()
+	violin.hacerTremolo()
+	violin.hacerTremolo()
+	violin.hacerTremolo()
+	violin.hacerTremolo()
+	violin.hacerTremolo()
+	assert.equals(violin.afinacion(),true)
+}
+
+test " El violín luego de 10 trémolos exactos, queda desafinado" {
+	const violin= new Stagg(tremolos=0,pintura="laca acrilica")
+	violin.hacerTremolo()
+	violin.hacerTremolo()
+	violin.hacerTremolo()
+	violin.hacerTremolo()
+	violin.hacerTremolo()
+	violin.hacerTremolo()
+	violin.hacerTremolo()
+	violin.hacerTremolo()
+	violin.hacerTremolo()
+	violin.hacerTremolo()
+	assert.equals(violin.afinacion(),false)
+}
+
+test " El violín tiene un costo inicial de 20 chelines (sin trémolos)" {
+	const violin= new Stagg(tremolos=0,pintura="laca acrilica")
+	assert.equals(violin.costo(),20)
+}
+
+test " Con exactamente 2 trémolos, el violín tiene un costo de 18 chelines" {
+	const violin= new Stagg(tremolos=0,pintura="laca acrilica")
+	violin.hacerTremolo()
+	violin.hacerTremolo()
+	assert.equals(violin.costo(),18)
+}
+
+test " Con 10 trémolos, el violín tiene un costo de 15 chelines (nunca baja de 15)" {
+	const violin= new Stagg(tremolos=0,pintura="laca acrilica")
+	violin.hacerTremolo()
+	violin.hacerTremolo()
+	violin.hacerTremolo()
+	violin.hacerTremolo()
+	violin.hacerTremolo()
+	violin.hacerTremolo()
+	violin.hacerTremolo()
+	violin.hacerTremolo()
+	violin.hacerTremolo()
+	violin.hacerTremolo()
+	assert.equals(violin.costo(),15)
+}
+
+test " Pintado con “laca acrílica”, el violín es valioso" {
+	const violin= new Stagg(tremolos=0,pintura="laca acrilica")
+	assert.equals(violin.esValioso(),true)
+}
+
+test " Pintado con “látex satinado”, el violín no es valioso" {
+	const violin= new Stagg(tremolos=0,pintura="látex satinado")
+	assert.equals(violin.esValioso(),false)
+}
 }
