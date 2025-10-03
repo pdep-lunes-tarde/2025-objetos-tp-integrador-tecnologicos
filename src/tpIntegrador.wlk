@@ -6,10 +6,11 @@ class Instrumento {
         revisiones.add(nuevaRevision)
     }
 
-    method afinacion()//true corresponde a un instrumento afinado y false a uno desafinado
+    method estaAfinado()//true corresponde a un instrumento afinado y false a uno desafinado
     method costo()
     method esValioso()
-    method familia
+    method familia()
+    method esCopado() = false
 }
 
 class Revision {
@@ -19,7 +20,7 @@ class Revision {
 class Fender inherits Instrumento {
     const color 
 
-    override method afinacion()= true
+    override method estaAfinado()= true
     
     override method costo(){
         if(color == "negro"){
@@ -33,7 +34,7 @@ class Fender inherits Instrumento {
 class Jupiter inherits Instrumento {
     var temperatura 
     const sordina
-    override method afinacion(){
+    override method estaAfinado(){
         return temperatura.between(20,25)
     }
     method calentarMetal()  { // en el punto 5??
@@ -49,6 +50,7 @@ class Jupiter inherits Instrumento {
     override method esValioso() = false
     override method familia()="vientos"
     method temp()=temperatura
+    override method esCopado()= sordina
 }
 
 class Bechstein inherits Instrumento{
@@ -58,20 +60,20 @@ class Bechstein inherits Instrumento{
         self.registrarRevision(new Date(), "Fabrica")
     }
     
-    override method afinacion (){
+    override method estaAfinado(){
      const superficieSalon = anchoSalon * largoSalon
         return superficieSalon > 20
     }
     override method costo()= 2*anchoSalon
-    override method esValioso() = self.afinacion()
+    override method esValioso() = self.estaAfinado()
     override method familia()="cuerdas"
-
+    override method esCopado() = (anchoSalon>6||largoSalon>6)
 }
 
 class Stagg inherits Instrumento{
     var tremolos = 0
     const property pintura  
-    override method afinacion (){
+    override method estaAfinado(){
         return tremolos<10
     }
     
@@ -85,4 +87,35 @@ class Stagg inherits Instrumento{
     override method familia()= "cuerdas"
 
 }
-//
+//2 los musicos 
+
+class Musico { 
+     var instrumento
+     var preferencia
+     method esExperto() = instrumento.familia()==preferencia
+     method esFeliz()= instrumento.esCopado()
+}
+const trompetaJupiter = new Jupiter(temperatura = 22, sordina = false)
+const pianoBechstein = new Bechstein(anchoSalon=5,largoSalon=5)
+const guitarraFender = new Fender(color = "negro" )
+const violinStagg = new Stagg (pintura ="laca acrilica" )
+object johann inherits Musico(instrumento = trompetaJupiter,preferencia="vientos"){
+    override method esFeliz() = instrumento.costo() >20
+}
+
+object wolfgang inherits Musico(instrumento = trompetaJupiter,preferencia="vientos"){
+    override method esFeliz()=johann.esFeliz()
+}
+
+object antonio inherits Musico(instrumento = pianoBechstein,preferencia="vientos"){
+    override method esFeliz()= instrumento.esValioso()
+} 
+
+object giuseppe inherits Musico(instrumento = guitarraFender,preferencia="vientos"){
+  override method esFeliz()= instrumento.estaAfinado()
+}
+object maddalena inherits Musico(instrumento= violinStagg,preferencia="vientos"){
+  override method esFeliz()= instrumento.costo().even()
+}
+
+//3 musicos y orquestas 
