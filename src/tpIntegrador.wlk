@@ -11,6 +11,16 @@ class Instrumento {
     method esValioso()
     method familia()
     method esCopado() = false
+    method afinar()
+    method revisionMenorADosMeses(){
+        const fechaDeHoy = new Date()
+        const dosMesesAtras = fechaDeHoy.minusMonths(2)
+        const fechaRevision = Instrumento.revisiones.last().fechaRevision()
+        return (fechaRevision > dosMesesAtras) 
+    }
+    method revisionesRecientes(){
+        return revisiones.filter(self.revisionMenorADosMeses())
+    }
 }
 
 class Revision {
@@ -37,6 +47,17 @@ class Jupiter inherits Instrumento {
     override method estaAfinado(){
         return temperatura.between(20,25)
     }
+
+    override method afinar(){
+        if(temperatura<25){
+            self.calentarMetal()
+            if(temperatura<25){
+                self.calentarMetal()
+                self.afinar()
+            }
+        }
+    }
+    
     method calentarMetal()  { // en el punto 5??
         temperatura=temperatura + 1}
     
@@ -54,8 +75,8 @@ class Jupiter inherits Instrumento {
 }
 
 class Bechstein inherits Instrumento{
-    const anchoSalon 
-    const largoSalon
+    var anchoSalon 
+    var largoSalon
     method revisionDeFabrica(){
         self.registrarRevision(new Date(), "Fabrica")
     }
@@ -68,6 +89,10 @@ class Bechstein inherits Instrumento{
     override method esValioso() = self.estaAfinado()
     override method familia()="cuerdas"
     override method esCopado() = (anchoSalon>6||largoSalon>6)
+    override method afinar(){
+        anchoSalon=8
+        largoSalon=4
+    }
 }
 
 class Stagg inherits Instrumento{
@@ -85,7 +110,26 @@ class Stagg inherits Instrumento{
 
     override method esValioso ()= pintura == "laca acrilica"
     override method familia()= "cuerdas"
+    override method afinar(){
+        tremolos=0
+    }
+}
 
+class Generico inherits Instrumento {
+    const familia
+    override method familia()=familia
+    override method costo()=familia.size()*self.multiplicador()
+    method multiplicador(){
+        const valorRandom = valorRandom.anyOne(1,10)
+        if(valorRandom.even()) return 2
+        else return 3
+    }
+    override method estaAfinado(){
+        const fechaDeHoy = new Date()
+        const fechaUltimaRevision = revisiones.last().fechaRevision()
+        const limiteAfinacion = fechaDeHoy.minusMonths(1)
+        return fechaUltimaRevision > limiteAfinacion             
+    }
 }
 //2 los musicos 
 
@@ -119,3 +163,37 @@ object maddalena inherits Musico(instrumento= violinStagg,preferencia="vientos")
 }
 
 //3 musicos y orquestas 
+class Orquesta {
+    var cantMaxMusicos
+    var integrantes = #{}
+
+    method agregarMusico(unMusico){
+        if(integrantes.size()<cantMaxMusicos)
+            integrantes.add(unMusico)
+        else console.println("Banda completa")
+    }
+
+    method bienConformada(){
+      integrantes.all({unIntegrante => unIntegrante.esFeliz()})
+    }
+}
+
+//5 
+class Tecnico {
+    const nombre
+    const especialistaEn = #{}
+
+    method revision(instrumento){
+        if((especialistaEn.contains(instrumento.familia()))
+            && self.revisionMayorASemana(instrumento))
+                instrumento.afinar()
+                instrumento.registrarRevision(new Date(),nombre)
+    }
+    method revisionMayorASemana(instrumento){
+        const fechaDeHoy = new Date()
+        const unaSemanaAtras = fechaDeHoy.minusWeeks(1)
+        const fechaUltimaRevision = Instrumento.revisiones.last().fechaRevision()
+        return (fechaUltimaRevision > unaSemanaAtras) || Instrumento.revisiones.isEmpty()
+    }
+}
+
