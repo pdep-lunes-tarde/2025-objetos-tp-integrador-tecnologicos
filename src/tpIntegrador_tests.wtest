@@ -1,5 +1,362 @@
 import tpIntegrador.*
+// test punto 1
+describe"INSTRUMENTOS"{
+	//GUITARRA FENDER
+test " una Fender está afinada" {
+	const guitarra= new Fender(color="negro")
+	assert.equals(guitarra.estaAfinado(), true)
+}
+test " el costo de una Fender negra es 15" {
+	const guitarra= new Fender(color="negro")
+	assert.equals(guitarra.costo(), 15)
+}
 
-test "Test de prueba" {
-	assert.equals(4, 2 + 2)
+test " el costo de una Fender roja es es 10" {
+	const guitarra= new Fender(color="rojo")
+	assert.equals(guitarra.costo(), 10)
+}
+
+test " una Fender es valiosa" {
+	const guitarra= new Fender(color="rojo")
+	assert.equals(guitarra.esValioso(),true)
+}
+// TROMPETA JUPITER
+test " Una trompeta Júpiter a una temperatura ambiente de 20 grados está afinada" {
+	const trompeta= new Jupiter(temperatura=20,sordina=true)
+	assert.equals(trompeta.estaAfinado(),true)
+}
+test " Una trompeta Júpiter a una temperatura ambiente de 25 grados está afinada" {
+	const trompeta= new Jupiter(temperatura=25,sordina=true)
+	assert.equals(trompeta.estaAfinado(),true)
+}
+
+test " Una trompeta Júpiter a una temperatura ambiente de 19 grados no está afinada" {
+	const trompeta= new Jupiter(temperatura=19,sordina=true)
+	assert.equals(trompeta.estaAfinado(),false)
+}
+
+test " Una trompeta Júpiter a una temperatura ambiente de 26 grados no está afinada" {
+	const trompeta= new Jupiter(temperatura=26,sordina=true)
+	assert.equals(trompeta.estaAfinado(),false)
+}
+
+test " Una trompeta Júpiter a una temperatura ambiente de 19 grados, si la afinamos, pasa a estar afinada" {
+	const trompeta= new Jupiter(temperatura=19,sordina=true)
+	assert.equals(trompeta.estaAfinado(),false)
+	trompeta.calentarMetal() 
+	assert.equals(trompeta.estaAfinado(),true)
+}
+
+test " La trompeta cuesta sin sordina 30 chelines" {
+	const trompeta= new Jupiter(temperatura=26,sordina=false)
+	assert.equals(trompeta.costo(),30)
+}
+
+test " La trompeta cuesta con sordina 35 chelines" {
+	const trompeta= new Jupiter(temperatura=26,sordina=true)
+	assert.equals(trompeta.costo(),35)
+}
+
+test " La trompeta no es valiosa" {
+	const trompeta= new Jupiter(temperatura=26,sordina=false)
+	assert.equals(trompeta.esValioso(),false)
+}
+//Piano Bechstein
+test " El piano en una habitación de 5x5 está afinado" {
+	const piano= new Bechstein(anchoSalon=5,largoSalon=5)
+	assert.equals(piano.estaAfinado(),true)
+}
+test " El piano en una habitación chica (de 20 metros cuadrados) no está afinado" {
+	const piano= new Bechstein(anchoSalon=5,largoSalon=4)
+	assert.equals(piano.estaAfinado(),false)
+}
+
+test " El costo del piano en la habitación de 5x5 es de 10" {
+	const piano= new Bechstein(anchoSalon=5,largoSalon=5)
+	assert.equals(piano.costo(),10)
+}
+
+test " El piano es valioso en la habitación inicial de 5x5" {
+	const piano= new Bechstein(anchoSalon=5,largoSalon=5)
+	assert.equals(piano.esValioso(),true)
+}
+
+test " El piano movido a una habitación chica (de 20 metros cuadrados) no es valioso" {
+	const piano= new Bechstein(anchoSalon=4,largoSalon=5)
+	assert.equals(piano.esValioso(),false)
+}
+//Violín Stagg
+test " El violín Stagg comienza afinado (0 trémolos)" {
+	const violin= new Stagg(tremolos=0,pintura="laca acrilica")
+	assert.equals(violin.estaAfinado(),true)
+}
+test " El violín con 9 trémolos todavía está afinado" {
+	const violin= new Stagg(tremolos=0,pintura="laca acrilica")
+	violin.hacerTremolo()
+	violin.hacerTremolo()
+	violin.hacerTremolo()
+	violin.hacerTremolo()
+	violin.hacerTremolo()
+	violin.hacerTremolo()
+	violin.hacerTremolo()
+	violin.hacerTremolo()
+	violin.hacerTremolo()
+	assert.equals(violin.estaAfinado(),true)
+}
+
+test " El violín luego de 10 trémolos exactos, queda desafinado" {
+	const violin= new Stagg(tremolos=0,pintura="laca acrilica")
+	violin.hacerTremolo()
+	violin.hacerTremolo()
+	violin.hacerTremolo()
+	violin.hacerTremolo()
+	violin.hacerTremolo()
+	violin.hacerTremolo()
+	violin.hacerTremolo()
+	violin.hacerTremolo()
+	violin.hacerTremolo()
+	violin.hacerTremolo()
+	assert.equals(violin.estaAfinado(),false)
+}
+
+test " El violín tiene un costo inicial de 20 chelines (sin trémolos)" {
+	const violin= new Stagg(tremolos=0,pintura="laca acrilica")
+	assert.equals(violin.costo(),20)
+}
+
+test " Con exactamente 2 trémolos, el violín tiene un costo de 18 chelines" {
+	const violin= new Stagg(tremolos=0,pintura="laca acrilica")
+	violin.hacerTremolo()
+	violin.hacerTremolo()
+	assert.equals(violin.costo(),18)
+}
+
+test " Con 10 trémolos, el violín tiene un costo de 15 chelines (nunca baja de 15)" {
+	const violin= new Stagg(tremolos=0,pintura="laca acrilica")
+	violin.hacerTremolo()
+	violin.hacerTremolo()
+	violin.hacerTremolo()
+	violin.hacerTremolo()
+	violin.hacerTremolo()
+	violin.hacerTremolo()
+	violin.hacerTremolo()
+	violin.hacerTremolo()
+	violin.hacerTremolo()
+	violin.hacerTremolo()
+	assert.equals(violin.costo(),15)
+}
+
+test " Pintado con “laca acrílica”, el violín es valioso" {
+	const violin= new Stagg(tremolos=0,pintura="laca acrilica")
+	assert.equals(violin.esValioso(),true)
+}
+
+test " Pintado con “látex satinado”, el violín no es valioso" {
+	const violin= new Stagg(tremolos=0,pintura="látex satinado")
+	assert.equals(violin.esValioso(),false)
+}
+}
+
+describe "MUSICOS"{
+	test " Johann es feliz con una trompeta Jupiter (que es cara)" {
+	assert.equals(johann.esFeliz(),true)
+}
+
+	test " Johann no es feliz con un violín Stagg (sin trémolos, que no es cara)" {
+	const violin= new Stagg(tremolos=0,pintura="látex satinado")
+	johann.cambiarInstrumento(violin)
+	assert.equals(johann.esFeliz(),false)
+}
+
+	test " Wolfgang es feliz si Johann tiene una trompeta Jupiter" {
+	assert.equals(wolfgang.esFeliz(),true)
+}
+
+	test " Wolfgang no es feliz si Johann tiene un violín Stagg (sin trémolos)" {
+	const violin= new Stagg(tremolos=0,pintura="látex satinado")
+	johann.cambiarInstrumento(violin)
+	assert.equals(wolfgang.esFeliz(),false)
+}
+	test " Giuseppe es feliz con una guitarra Fender (que está siempre afinada)" {
+	assert.equals(giuseppe.esFeliz(),true)
+}
+
+	test " Giuseppe no es feliz con un piano Bechstein en una habitación de un metro cuadrado" {
+	const piano= new Bechstein(anchoSalon=1,largoSalon=1)
+	giuseppe.cambiarInstrumento(piano)
+	assert.equals(giuseppe.esFeliz(),false)
+}
+
+	test " Maddalena con el violín Stagg sin trémolos es feliz (costo 20, es par)" {
+	assert.equals(maddalena.esFeliz(),true)
+}
+
+	test " Maddalena con el violín Stagg con un trémolo no es feliz (costo 19, es impar)" {
+	const violin= new Stagg(tremolos=1,pintura="látex satinado")
+    maddalena.cambiarInstrumento(violin)
+	assert.equals(maddalena.esFeliz(),false)
+}
+
+	test " Dada una lista de músicos de una asociación musical, podemos saber quiénes son felices" {
+    const violin= new Stagg(tremolos=0,pintura="látex satinado")
+	johann.cambiarInstrumento(violin)
+	//lista de musicos
+	const musicos=[johann,wolfgang,giuseppe,maddalena]
+	const felices=asociacionMusical.musicosFelices(musicos)
+	assert.equals(felices,[giuseppe,maddalena])
+	}
+}
+
+describe "MUSICOS Y ORQUESTA"{
+//MUSICOS
+	test " Un músico que es experto porque su preferencia coincide con la del instrumento que tiene" {
+	const violin= new Stagg(tremolos=0,pintura="látex satinado")
+	const musico= new Musico(instrumento=violin,preferencia="cuerdas")
+	assert.equals(musico.esExperto(),true)
+}
+	test " Un músico cuya preferencia de familia no coincida con la del instrumento no es experto." {
+	const violin= new Stagg(tremolos=0,pintura="látex satinado")// defno el instrumento 
+	const musico= new Musico(instrumento=violin,preferencia="vientos") // creo al musico y le asigno el instrumento creado y hago que no coincida con la prefrencia
+	assert.equals(musico.esExperto(),false)
+}
+
+	test " Un músico feliz porque la trompeta Júpiter tiene sordina y es copada." {
+	const trompeta= new Jupiter(temperatura=23,sordina=true)
+	const musico= new Musico(instrumento=trompeta,preferencia="cuerdas")
+	assert.equals(musico.esFeliz(),true)
+}
+
+	test " Un músico que no es feliz porque la trompeta Júpiter no tiene sordina y no es copada." {
+	const trompeta= new Jupiter(temperatura=23,sordina=false)
+	const musico= new Musico(instrumento=trompeta,preferencia="cuerdas")
+	assert.equals(musico.esFeliz(),false)
+}
+
+	test " Un músico común no es feliz ni para el violín Stagg ni para la guitarra Fender." {
+	const violin= new Stagg(tremolos=0,pintura="látex satinado")
+	const guitarra= new Fender(color="rojo")
+	const musico= new Musico(instrumento=violin,preferencia="cuerdas")
+	assert.equals(musico.esFeliz(),false)
+	musico.cambiarInstrumento(guitarra)
+	assert.equals(musico.esFeliz(),false)
+}
+
+	test " Un músico común que es feliz con un piano Bechstein (el largo o el ancho de la habitación deben ser > 6)." {
+	const piano= new Bechstein(anchoSalon=8,largoSalon=5)
+	const musico= new Musico(instrumento=piano,preferencia="cuerdas")
+	assert.equals(musico.esFeliz(),true)
+}
+
+	test " un músico común que no es feliz si la habitación no es lo suficientemente ancha ni larga." {
+	const piano= new Bechstein(anchoSalon=6,largoSalon=5)
+	const musico= new Musico(instrumento=piano,preferencia="cuerdas")
+	assert.equals(musico.esFeliz(),false)
+}
+
+	test " un músico con preferencia por la “percusión” que no es feliz con un instrumento de “cuerdas”" {
+	const guitarra= new Fender(color="rojo")
+	const musico= new Musico(instrumento=guitarra,preferencia="percusion")
+	assert.equals(musico.esFeliz(),false)
+}
+//ORQUESTA
+test " No se puede agregar dos veces el mismo músico a la orquesta" {
+	// creo los instrumentos
+	const guitarra= new Fender(color="rojo")
+	const violin= new Stagg(tremolos=0,pintura="laca acrilica")
+	//creo a los musicos
+	const musico1= new Musico(instrumento=guitarra,preferencia="percusion")
+	const musico2= new Musico(instrumento=violin,preferencia="cuerdas")
+	const musico3= new Musico(instrumento=guitarra,preferencia="percusion")
+	//creo la orquesta
+	const orquesta=new Orquesta(cantMaxMusicos=3)
+	//agrgego musicos
+	orquesta.agregarMusico(musico1)
+	orquesta.agregarMusico(musico1)// este no se deberia agregar
+	orquesta.agregarMusico(musico2)
+	//verifico que en la lista hay 2 musicos 
+	assert.equals(orquesta.cantidad_musicos(),2)
+	//verifico quienes son los dos musicos del set
+	assert.equals(orquesta.los_integrantes().contains(musico1),true)
+	assert.equals(orquesta.los_integrantes().contains(musico2),true)
+}
+
+test "No se puede agregar más músicos del permitido" {
+	// creo los instrumentos
+	const guitarra= new Fender(color="rojo")
+	const violin= new Stagg(tremolos=0,pintura="laca acrilica")
+	//creo a los musicos
+	const musico1= new Musico(instrumento=guitarra,preferencia="percusion")
+	const musico2= new Musico(instrumento=violin,preferencia="cuerdas")
+	const musico3= new Musico(instrumento=guitarra,preferencia="percusion")
+	//creo la orquesta
+	const orquesta=new Orquesta(cantMaxMusicos=2)
+	//agrgego musicos
+	orquesta.agregarMusico(musico1)
+	orquesta.agregarMusico(musico2)
+	orquesta.agregarMusico(musico3)// este no se deberia agregar
+	//verifico que en la lista hay 2 musicos 
+	assert.equals(orquesta.cantidad_musicos(),2)
+	//verifico quienes son los dos musicos de la lista
+	assert.equals(orquesta.los_integrantes().contains(musico1),true)
+	assert.equals(orquesta.los_integrantes().contains(musico2),true)
+	assert.equals(orquesta.los_integrantes().contains(musico3),false)
+}
+
+test " Se puede agregar más músicos si todavia no se llego a la cantidad maxima de musicos en la orquesta" {
+	// creo los instrumentos
+	const guitarra= new Fender(color="rojo")
+	const violin= new Stagg(tremolos=0,pintura="laca acrilica")
+	//creo a los musicos
+	const musico1= new Musico(instrumento=guitarra,preferencia="percusion")
+	const musico2= new Musico(instrumento=violin,preferencia="cuerdas")
+	const musico3= new Musico(instrumento=guitarra,preferencia="percusion")
+	//creo la orquesta
+	const orquesta=new Orquesta(cantMaxMusicos=3)
+	//agrgego musicos
+	orquesta.agregarMusico(musico1)
+	orquesta.agregarMusico(musico2)
+	orquesta.agregarMusico(musico3)
+	//verifico que en la lista hay 3 musicos 
+	assert.equals(orquesta.cantidad_musicos(),3)
+	//verifico quienes son los 3 musicos de la lista
+	assert.equals(orquesta.los_integrantes().contains(musico1),true)
+	assert.equals(orquesta.los_integrantes().contains(musico2),true)
+	assert.equals(orquesta.los_integrantes().contains(musico3),true)
+}
+
+test " Una orquesta está bien conformada porque todos sus integrantes son felices." {
+	// creo los instrumentos
+	const piano= new Bechstein(anchoSalon=8,largoSalon=5)
+	const trompeta= new Jupiter(temperatura=26,sordina=true)
+	//creo a los musicos
+	const musico1= new Musico(instrumento=piano,preferencia="percusion")
+	const musico2= new Musico(instrumento=trompeta,preferencia="cuerdas")
+	
+	//creo la orquesta
+	const orquesta=new Orquesta(cantMaxMusicos=2)
+	//agrgego musicos
+	orquesta.agregarMusico(musico1)
+	orquesta.agregarMusico(musico2)
+	
+	//verifico que la oruesta este bien conformada
+	assert.equals(orquesta.bienConformada(),true)
+}
+
+test " Una orquesta no está bien conformada porque alguno de sus integrantes no es feliz." {
+	// creo los instrumentos
+	const piano= new Bechstein(anchoSalon=8,largoSalon=5)
+	const trompeta= new Jupiter(temperatura=26,sordina=false)
+	//creo a los musicos
+	const musico1= new Musico(instrumento=piano,preferencia="percusion")
+	const musico2= new Musico(instrumento=trompeta,preferencia="cuerdas")// no es feliz 
+	
+	//creo la orquesta
+	const orquesta=new Orquesta(cantMaxMusicos=2)
+	//agrgego musicos
+	orquesta.agregarMusico(musico1)
+	orquesta.agregarMusico(musico2)
+	
+	//verifico que la oruesta no este bien conformada
+	assert.equals(orquesta.bienConformada(),false)
+}
 }
