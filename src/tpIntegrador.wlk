@@ -39,6 +39,9 @@ class Fender inherits Instrumento {
     }
     override method esValioso()=true
     override method familia()="cuerdas"
+    override method afinar(){// si no lo agrego me queda abstracto y no puedo intsanciar las fender
+    }
+
 }
 
 class Jupiter inherits Instrumento {
@@ -135,9 +138,12 @@ class Generico inherits Instrumento {
 
 class Musico { 
      var instrumento
-     var preferencia
+     const preferencia
      method esExperto() = instrumento.familia()==preferencia
      method esFeliz()= instrumento.esCopado()
+     method cambiarInstrumento(instrumentoNuevo){
+      instrumento=instrumentoNuevo
+     }
 }
 const trompetaJupiter = new Jupiter(temperatura = 22, sordina = false)
 const pianoBechstein = new Bechstein(anchoSalon=5,largoSalon=5)
@@ -161,21 +167,25 @@ object giuseppe inherits Musico(instrumento = guitarraFender,preferencia="viento
 object maddalena inherits Musico(instrumento= violinStagg,preferencia="vientos"){
   override method esFeliz()= instrumento.costo().even()
 }
+object asociacionMusical{
+method musicosFelices(musicos)=musicos.filter({mu => mu.esFeliz()})
+}
 
 //3 musicos y orquestas 
 class Orquesta {
-    var cantMaxMusicos
-    var integrantes = #{}
+    const cantMaxMusicos
+    const integrantes = #{}
 
     method agregarMusico(unMusico){
         if(integrantes.size()<cantMaxMusicos)
             integrantes.add(unMusico)
-        else console.println("Banda completa")
+       // else console.println("Banda completa")
     }
 
-    method bienConformada(){
-      integrantes.all({unIntegrante => unIntegrante.esFeliz()})
-    }
+    method bienConformada()=integrantes.all({unIntegrante => unIntegrante.esFeliz()})
+    
+    method los_integrantes()=integrantes // para acceder al set de integrantes desde afuera (para los test)
+    method cantidad_musicos()=integrantes.size()// para acceder al set de integrantes desde afuera (para los test)
 }
 
 //5 
